@@ -8,6 +8,7 @@ import org.hexworks.zircon.api.builder.component.ComponentStyleSetBuilder
 import org.hexworks.zircon.api.builder.graphics.StyleSetBuilder
 import org.hexworks.zircon.api.color.TileColor
 import org.hexworks.zircon.api.component.ColorTheme
+import org.hexworks.zircon.api.component.ScrollBar
 import org.hexworks.zircon.api.component.Slider
 import org.hexworks.zircon.api.component.data.ComponentMetadata
 import org.hexworks.zircon.api.component.renderer.ComponentRenderingStrategy
@@ -21,7 +22,7 @@ abstract class BaseSlider(final override val minValue: Int,
                           final override val maxValue: Int,
                           final override val numberOfSteps: Int,
                           componentMetadata: ComponentMetadata,
-                          private val renderingStrategy: ComponentRenderingStrategy<Slider>) :
+                          private val renderingStrategy: ComponentRenderingStrategy<ScrollBar>) :
         Slider, DefaultComponent(
         componentMetadata = componentMetadata,
         renderer = renderingStrategy) {

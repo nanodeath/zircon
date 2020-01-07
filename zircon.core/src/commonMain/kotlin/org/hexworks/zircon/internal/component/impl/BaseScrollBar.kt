@@ -21,16 +21,16 @@ import kotlin.math.truncate
 @Suppress("LeakingThis")
 abstract class BaseScrollBar(final override val minValue: Int,
                              final override var maxValue: Int,
-                             final override val numberOfSteps: Int,
-                             final override var itemsShownAtOnce: Int,
+                             final override var rangeValue: Int,
+                             val numberOfSteps: Int,
                              componentMetadata: ComponentMetadata,
-                             private val renderingStrategy: ComponentRenderingStrategy<ScrollBar>) :
+                             renderingStrategy: ComponentRenderingStrategy<ScrollBar>) :
         ScrollBar, DefaultComponent(
         componentMetadata = componentMetadata,
         renderer = renderingStrategy) {
 
-    private var range: Int = maxValue - minValue
-    protected var valuePerStep: Double = range.toDouble() / numberOfSteps.toDouble()
+    private var totalRange: Int = maxValue - minValue
+    protected var valuePerStep: Double = totalRange.toDouble() / numberOfSteps.toDouble()
 
     final override val currentValueProperty = createPropertyFrom(minValue)
     final override var currentValue: Int by currentValueProperty.asDelegate()
@@ -38,7 +38,7 @@ abstract class BaseScrollBar(final override val minValue: Int,
     final override val currentStepProperty = createPropertyFrom(minValue)
     final override var currentStep: Int by currentStepProperty.asDelegate()
 
-    override var barSizeInSteps = (itemsShownAtOnce / valuePerStep).roundToInt()
+    var barSizeInSteps = (rangeValue / valuePerStep).roundToInt()
 
     init {
         render()
@@ -72,13 +72,13 @@ abstract class BaseScrollBar(final override val minValue: Int,
         currentStep = roundedStep.toInt()
     }
 
-    override fun incrementValues() {
-        if (currentValue + itemsShownAtOnce < maxValue) {
+    override fun incrementValue() {
+        if (currentValue + rangeValue < maxValue) {
             currentValue++
         }
     }
 
-    override fun decrementValues() {
+    override fun decrementValue() {
         if (currentValue > minValue) {
             currentValue--
         }
@@ -96,23 +96,22 @@ abstract class BaseScrollBar(final override val minValue: Int,
         }
     }
 
-    override fun resizeScrollBar(maxValue: Int) {
+    override fun changeMaxValue(maxValue: Int) {
         if (maxValue >= 0) {
             this.maxValue = maxValue
-            range = this.maxValue - minValue
-            valuePerStep = range.toDouble() / numberOfSteps.toDouble()
+            valuePerStep = (maxValue - minValue).toDouble() / numberOfSteps.toDouble()
 
-            barSizeInSteps = ceil(itemsShownAtOnce / valuePerStep).toInt()
+            barSizeInSteps = ceil(rangeValue / valuePerStep).toInt()
             addToCurrentValues(0)
             render()
         }
     }
 
     protected fun addToCurrentValues(value: Int) {
-        if (currentValue + itemsShownAtOnce + value <= maxValue) {
+        if (currentValue + rangeValue + value <= maxValue) {
             currentValue += value
         } else {
-            currentValue = maxValue - itemsShownAtOnce
+            currentValue = maxValue - rangeValue
         }
     }
 

@@ -7,19 +7,23 @@ import org.hexworks.zircon.api.component.renderer.ComponentRenderer
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.graphics.TileGraphics
+import kotlin.math.roundToInt
 
 @Suppress("DuplicatedCode")
 class VerticalScrollBarRenderer : ComponentRenderer<ScrollBar> {
 
     override fun render(tileGraphics: TileGraphics, context: ComponentRenderContext<ScrollBar>) {
+        val component = context.component
         val defaultStyleSet = context.componentStyle.fetchStyleFor(ComponentState.DEFAULT)
         val invertedDefaultStyleSet = defaultStyleSet
                 .withBackgroundColor(defaultStyleSet.foregroundColor)
                 .withForegroundColor(defaultStyleSet.backgroundColor)
         val disabledStyleSet = context.componentStyle.fetchStyleFor(ComponentState.DISABLED)
 
+        val barSizeInSteps = (component.rangeValue / ((component.maxValue - component.minValue).toDouble() / component.size.height.toDouble())).roundToInt()
+
         val lowBarPosition = context.component.currentStep
-        val highBarPosition = lowBarPosition + context.component.barSizeInSteps - 1
+        val highBarPosition = lowBarPosition + barSizeInSteps - 1
         val totalScrollBarHeight = context.component.contentSize.height
 
         tileGraphics.applyStyle(context.currentStyle)

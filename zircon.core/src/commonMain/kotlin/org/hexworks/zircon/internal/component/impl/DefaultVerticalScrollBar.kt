@@ -18,7 +18,7 @@ class DefaultVerticalScrollBar(componentMetadata: ComponentMetadata,
         renderingStrategy = renderingStrategy,
         minValue = minValue,
         maxValue = maxValue,
-        itemsShownAtOnce = itemsShownAtOnce,
+        rangeValue = itemsShownAtOnce,
         numberOfSteps = numberOfSteps) {
 
     override fun getMousePosition(event: MouseEvent): Int {
@@ -29,11 +29,11 @@ class DefaultVerticalScrollBar(componentMetadata: ComponentMetadata,
         if (phase == UIEventPhase.TARGET) {
             when (event.code) {
                 KeyCode.UP -> {
-                    incrementValues()
+                    incrementValue()
                     Processed
                 }
                 KeyCode.DOWN -> {
-                    decrementValues()
+                    decrementValue()
                     Processed
                 }
                 KeyCode.RIGHT -> {

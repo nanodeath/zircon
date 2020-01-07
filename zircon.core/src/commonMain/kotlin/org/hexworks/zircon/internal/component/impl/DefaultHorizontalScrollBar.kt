@@ -18,7 +18,7 @@ class DefaultHorizontalScrollBar(componentMetadata: ComponentMetadata,
         renderingStrategy = renderingStrategy,
         minValue = minValue,
         maxValue = maxValue,
-        itemsShownAtOnce = itemsShownAtOnce,
+        rangeValue = itemsShownAtOnce,
         numberOfSteps = numberOfSteps) {
 
     override fun getMousePosition(event: MouseEvent): Int {
@@ -29,11 +29,11 @@ class DefaultHorizontalScrollBar(componentMetadata: ComponentMetadata,
         if (phase == UIEventPhase.TARGET) {
             when (event.code) {
                 KeyCode.RIGHT -> {
-                    incrementValues()
+                    incrementValue()
                     Processed
                 }
                 KeyCode.LEFT -> {
-                    decrementValues()
+                    decrementValue()
                     Processed
                 }
                 KeyCode.UP -> {

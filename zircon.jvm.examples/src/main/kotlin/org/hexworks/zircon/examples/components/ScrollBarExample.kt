@@ -60,7 +60,7 @@ object ScrollBarExample {
                 .withDecorations()
                 .build().apply {
                     processComponentEvents(ComponentEventType.ACTIVATED) {
-                        scrollbar1.decrementValues()
+                        scrollbar1.decrementValue()
                     }
                 }
         val incrementButton = Components.button()
@@ -69,7 +69,7 @@ object ScrollBarExample {
                 .withDecorations()
                 .build().apply {
                     processComponentEvents(ComponentEventType.ACTIVATED) {
-                        scrollbar1.incrementValues()
+                        scrollbar1.incrementValue()
                     }
                 }
         scrollbar1.onValueChange {
@@ -96,7 +96,7 @@ object ScrollBarExample {
         panel.addComponent(numberInput)
 
         numberInput.currentValueProperty.onChange {
-            scrollbar2.resizeScrollBar(it.newValue)
+            scrollbar2.changeMaxValue(it.newValue)
         }
         val label2 = Components.label()
                 .withText("Resize Me!")

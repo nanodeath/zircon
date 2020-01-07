@@ -16,19 +16,9 @@ interface ScrollBar : Component {
     val minValue: Int
 
     /**
-     * Number of visible steps
-     */
-    val numberOfSteps: Int
-
-    /**
-     * Size of bar in steps
-     */
-    val barSizeInSteps: Int
-
-    /**
      * Number of visible items
      */
-    val itemsShownAtOnce: Int
+    val rangeValue: Int
 
     /**
      * Current low value with respect to the maxValue
@@ -52,13 +42,13 @@ interface ScrollBar : Component {
 
     fun incrementStep()
     fun decrementStep()
-    fun incrementValues()
-    fun decrementValues()
+    fun incrementValue()
+    fun decrementValue()
 
     /**
-     * Function to specify a new maximum value and resize the scrollbar accordingly
+     * Function to specify a new maximum value and resize the handle accordingly
      */
-    fun resizeScrollBar(maxValue: Int)
+    fun changeMaxValue(maxValue: Int)
 
     /**
      * Callback called when low value changes
