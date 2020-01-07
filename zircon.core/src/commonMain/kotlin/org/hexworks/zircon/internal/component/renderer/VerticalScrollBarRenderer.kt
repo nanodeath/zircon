@@ -1,6 +1,6 @@
 package org.hexworks.zircon.internal.component.renderer
 
-import org.hexworks.zircon.api.component.ScrollBar
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.data.ComponentState
 import org.hexworks.zircon.api.component.renderer.ComponentRenderContext
 import org.hexworks.zircon.api.component.renderer.ComponentRenderer
@@ -10,9 +10,9 @@ import org.hexworks.zircon.api.graphics.TileGraphics
 import kotlin.math.roundToInt
 
 @Suppress("DuplicatedCode")
-class VerticalScrollBarRenderer : ComponentRenderer<ScrollBar> {
+class VerticalScrollBarRenderer : ComponentRenderer<RangeSelect> {
 
-    override fun render(tileGraphics: TileGraphics, context: ComponentRenderContext<ScrollBar>) {
+    override fun render(tileGraphics: TileGraphics, context: ComponentRenderContext<RangeSelect>) {
         val component = context.component
         val defaultStyleSet = context.componentStyle.fetchStyleFor(ComponentState.DEFAULT)
         val invertedDefaultStyleSet = defaultStyleSet

@@ -8,7 +8,7 @@ import org.hexworks.zircon.api.builder.component.ComponentStyleSetBuilder
 import org.hexworks.zircon.api.builder.graphics.StyleSetBuilder
 import org.hexworks.zircon.api.color.TileColor
 import org.hexworks.zircon.api.component.ColorTheme
-import org.hexworks.zircon.api.component.ScrollBar
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.Slider
 import org.hexworks.zircon.api.component.data.ComponentMetadata
 import org.hexworks.zircon.api.component.renderer.ComponentRenderingStrategy
@@ -18,17 +18,19 @@ import org.hexworks.zircon.api.uievent.*
 import kotlin.math.roundToInt
 import kotlin.math.truncate
 
-abstract class BaseSlider(final override val minValue: Int,
-                          final override val maxValue: Int,
-                          final override val numberOfSteps: Int,
+abstract class BaseSlider(final override var minValue: Int,
+                          final override var maxValue: Int,
+                          val numberOfSteps: Int,
                           componentMetadata: ComponentMetadata,
-                          private val renderingStrategy: ComponentRenderingStrategy<ScrollBar>) :
-        Slider, DefaultComponent(
+                          renderingStrategy: ComponentRenderingStrategy<RangeSelect>) :
+        RangeSelect, DefaultComponent(
         componentMetadata = componentMetadata,
         renderer = renderingStrategy) {
 
-    private val range: Int = maxValue - minValue
-    protected val valuePerStep: Double = range.toDouble() / numberOfSteps.toDouble()
+    //A slider is a scrollbar where both selected values are the same
+    final override var rangeValue = 0
+
+    protected var valuePerStep: Double = (maxValue - minValue).toDouble() / numberOfSteps.toDouble()
 
     final override val currentValueProperty = createPropertyFrom(minValue)
     override var currentValue: Int by currentValueProperty.asDelegate()
@@ -68,27 +70,36 @@ abstract class BaseSlider(final override val minValue: Int,
         currentStep = roundedStep.toInt()
     }
 
-    override fun incrementCurrentValue() {
+    override fun incrementValue() {
         if (currentValue < maxValue) {
             currentValue++
         }
     }
 
-    override fun decrementCurrentValue() {
+    override fun decrementValue() {
         if (currentValue > minValue) {
             currentValue--
         }
     }
 
-    override fun incrementCurrentStep() {
+    override fun incrementStep() {
         if (currentStep + 1 < numberOfSteps) {
             setValueToClosestOfStep(currentStep + 1)
         }
     }
 
-    override fun decrementCurrentStep() {
+    override fun decrementStep() {
         if (currentStep - 1 > 0) {
             setValueToClosestOfStep(currentStep - 1)
+        }
+    }
+
+    override fun changeMaxValue(maxValue: Int) {
+        if (maxValue >= 0) {
+            this.maxValue = maxValue
+            valuePerStep = (maxValue - minValue).toDouble() / numberOfSteps.toDouble()
+
+            render()
         }
     }
 

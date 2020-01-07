@@ -89,10 +89,10 @@ object SliderExample {
                 .withDecorations()
                 .build().apply {
                     processMouseEvents(MouseEventType.MOUSE_PRESSED) { _, _ ->
-                        slider3.decrementCurrentValue()
+                        slider3.decrementValue()
                     }
                     processComponentEvents(ComponentEventType.ACTIVATED) {
-                        slider3.decrementCurrentValue()
+                        slider3.decrementValue()
                     }
                 }
         val incrementButton = Components.button()
@@ -101,7 +101,7 @@ object SliderExample {
                 .withDecorations()
                 .build().apply {
                     processComponentEvents(ComponentEventType.ACTIVATED) {
-                        slider3.incrementCurrentValue()
+                        slider3.incrementValue()
                     }
                 }
         val numberInput = Components.horizontalNumberInput(3)

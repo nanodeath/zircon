@@ -1,5 +1,6 @@
 package org.hexworks.zircon.internal.component.renderer
 
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.Slider
 import org.hexworks.zircon.api.component.data.ComponentState
 import org.hexworks.zircon.api.component.renderer.ComponentRenderContext
@@ -10,9 +11,9 @@ import org.hexworks.zircon.api.graphics.Symbols
 import org.hexworks.zircon.api.graphics.TileGraphics
 
 @Suppress("DuplicatedCode")
-class VerticalSliderRenderer : ComponentRenderer<Slider> {
+class VerticalSliderRenderer : ComponentRenderer<RangeSelect> {
 
-    override fun render(tileGraphics: TileGraphics, context: ComponentRenderContext<Slider>) {
+    override fun render(tileGraphics: TileGraphics, context: ComponentRenderContext<RangeSelect>) {
         tileGraphics.applyStyle(context.currentStyle)
 
         val defaultStyleSet = context.componentStyle.fetchStyleFor(ComponentState.DEFAULT)
@@ -22,9 +23,8 @@ class VerticalSliderRenderer : ComponentRenderer<Slider> {
         val disabledStyleSet = context.componentStyle.fetchStyleFor(ComponentState.DISABLED)
 
         val cursorPosition = context.component.currentStep
-        val barWidth = context.component.numberOfSteps
 
-        (0..barWidth).forEach { idx ->
+        (0..context.component.height).forEach { idx ->
             when {
                 idx == cursorPosition -> tileGraphics.draw(
                         tile = Tile.createCharacterTile(Symbols.DOUBLE_LINE_HORIZONTAL, context.currentStyle),

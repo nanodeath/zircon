@@ -1,6 +1,6 @@
 package org.hexworks.zircon.api.builder.component
 
-import org.hexworks.zircon.api.component.ScrollBar
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.builder.base.BaseComponentBuilder
 import org.hexworks.zircon.api.component.data.ComponentMetadata
 import org.hexworks.zircon.api.component.renderer.ComponentRenderer
@@ -16,14 +16,14 @@ import kotlin.jvm.JvmStatic
 class VerticalScrollBarBuilder(
         private var minValue: Int = 0,
         private var maxValue: Int = 100)
-    : BaseComponentBuilder<ScrollBar, VerticalScrollBarBuilder>(VerticalScrollBarRenderer()) {
+    : BaseComponentBuilder<RangeSelect, VerticalScrollBarBuilder>(VerticalScrollBarRenderer()) {
 
     fun withNumberOfScrollableItems(items: Int) = also {
         require(items > 0) { "Number of items must be greater than 0." }
         this.maxValue = items
     }
 
-    override fun build(): ScrollBar = DefaultVerticalScrollBar(
+    override fun build(): RangeSelect = DefaultVerticalScrollBar(
             componentMetadata = ComponentMetadata(
                     size = size,
                     relativePosition = position,
@@ -35,7 +35,7 @@ class VerticalScrollBarBuilder(
             numberOfSteps = size.height,
             renderingStrategy = DefaultComponentRenderingStrategy(
                     decorationRenderers = decorationRenderers,
-                    componentRenderer = props.componentRenderer as ComponentRenderer<ScrollBar>)).apply {
+                    componentRenderer = props.componentRenderer as ComponentRenderer<RangeSelect>)).apply {
         colorTheme.map {
             theme = it
         }

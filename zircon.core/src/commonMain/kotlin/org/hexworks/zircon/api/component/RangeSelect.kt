@@ -4,24 +4,25 @@ import org.hexworks.cobalt.databinding.api.event.ChangeEvent
 import org.hexworks.cobalt.databinding.api.property.Property
 import org.hexworks.cobalt.events.api.Subscription
 
-interface ScrollBar : Component {
+
+interface RangeSelect : Component {
 
     /**
-     * Maximum value of the [ScrollBar]
+     * Maximum value of the [RangeSelect]
      */
-    val maxValue: Int
+    var maxValue: Int
     /**
-     * Minimum value of the [ScrollBar]
+     * Minimum value of the [RangeSelect]
      */
-    val minValue: Int
+    var minValue: Int
 
     /**
-     * Number of visible items
+     * Distance between the low and high values
      */
-    val rangeValue: Int
+    var rangeValue: Int
 
     /**
-     * Current low value with respect to the maxValue
+     * Current low value
      */
     var currentValue: Int
 
@@ -31,7 +32,7 @@ interface ScrollBar : Component {
     val currentValueProperty: Property<Int>
 
     /**
-     * Current low step with respect to the number of steps
+     * Current low step
      */
     var currentStep: Int
 
@@ -46,12 +47,12 @@ interface ScrollBar : Component {
     fun decrementValue()
 
     /**
-     * Function to specify a new maximum value and resize the handle accordingly
+     * Function to specify a new maximum value
      */
     fun changeMaxValue(maxValue: Int)
 
     /**
-     * Callback called when low value changes
+     * Callback called when the low value changes
      */
     fun onValueChange(fn: (ChangeEvent<Int>) -> Unit): Subscription
 

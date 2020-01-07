@@ -8,7 +8,7 @@ import org.hexworks.zircon.api.builder.component.ComponentStyleSetBuilder
 import org.hexworks.zircon.api.builder.graphics.StyleSetBuilder
 import org.hexworks.zircon.api.color.TileColor
 import org.hexworks.zircon.api.component.ColorTheme
-import org.hexworks.zircon.api.component.ScrollBar
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.data.ComponentMetadata
 import org.hexworks.zircon.api.component.renderer.ComponentRenderingStrategy
 import org.hexworks.zircon.api.extensions.abbreviate
@@ -19,13 +19,13 @@ import kotlin.math.roundToInt
 import kotlin.math.truncate
 
 @Suppress("LeakingThis")
-abstract class BaseScrollBar(final override val minValue: Int,
+abstract class BaseScrollBar(final override var minValue: Int,
                              final override var maxValue: Int,
                              final override var rangeValue: Int,
                              val numberOfSteps: Int,
                              componentMetadata: ComponentMetadata,
-                             renderingStrategy: ComponentRenderingStrategy<ScrollBar>) :
-        ScrollBar, DefaultComponent(
+                             renderingStrategy: ComponentRenderingStrategy<RangeSelect>) :
+        RangeSelect, DefaultComponent(
         componentMetadata = componentMetadata,
         renderer = renderingStrategy) {
 
@@ -215,7 +215,7 @@ abstract class BaseScrollBar(final override val minValue: Int,
     }
 
     companion object {
-        val LOGGER = LoggerFactory.getLogger(ScrollBar::class)
+        val LOGGER = LoggerFactory.getLogger(RangeSelect::class)
 
         enum class ClickedZone {
             TowardsLow,

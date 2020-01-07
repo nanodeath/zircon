@@ -1,6 +1,6 @@
 package org.hexworks.zircon.internal.component.impl
 
-import org.hexworks.zircon.api.component.ScrollBar
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.data.ComponentMetadata
 import org.hexworks.zircon.api.component.renderer.ComponentRenderingStrategy
 import org.hexworks.zircon.api.extensions.whenEnabledRespondWith
@@ -8,7 +8,7 @@ import org.hexworks.zircon.api.uievent.*
 import kotlin.math.roundToInt
 
 class DefaultVerticalScrollBar(componentMetadata: ComponentMetadata,
-                               renderingStrategy: ComponentRenderingStrategy<ScrollBar>,
+                               renderingStrategy: ComponentRenderingStrategy<RangeSelect>,
                                minValue: Int,
                                maxValue: Int,
                                itemsShownAtOnce: Int,

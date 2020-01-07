@@ -1,5 +1,6 @@
 package org.hexworks.zircon.api.builder.component
 
+import org.hexworks.zircon.api.component.RangeSelect
 import org.hexworks.zircon.api.component.Slider
 import org.hexworks.zircon.api.component.builder.base.BaseComponentBuilder
 import org.hexworks.zircon.api.component.data.ComponentMetadata
@@ -19,7 +20,7 @@ class VerticalSliderBuilder(
         private var maxValue: Int = 100,
         private var numberOfSteps: Int = 10,
         private var additionalHeightNeeded: Int = 5)
-    : BaseComponentBuilder<Slider, VerticalSliderBuilder>(VerticalSliderRenderer()) {
+    : BaseComponentBuilder<RangeSelect, VerticalSliderBuilder>(VerticalSliderRenderer()) {
 
     fun withMaxValue(max: Int) = also {
         require(max > minValue) { "Max value must be greater than min value" }
@@ -39,7 +40,7 @@ class VerticalSliderBuilder(
                 .withHeight(max(steps + 1, contentSize.height))
     }
 
-    override fun build(): Slider = DefaultVerticalSlider(
+    override fun build(): RangeSelect = DefaultVerticalSlider(
             componentMetadata = ComponentMetadata(
                     size = size,
                     relativePosition = position,
@@ -50,7 +51,7 @@ class VerticalSliderBuilder(
             numberOfSteps = numberOfSteps,
             renderingStrategy = DefaultComponentRenderingStrategy(
                     decorationRenderers = decorationRenderers,
-                    componentRenderer = props.componentRenderer as ComponentRenderer<Slider>)).apply {
+                    componentRenderer = props.componentRenderer as ComponentRenderer<RangeSelect>)).apply {
         colorTheme.map {
             theme = it
         }
