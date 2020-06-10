@@ -25,6 +25,7 @@ object Libs {
     const val gdxFreetypePlatform = "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion"
     const val gdxBox2D = "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     const val gdxBackendLwjgl = "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    const val gdxBackendAndroid = "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
     const val gdxPlatform = "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     const val gdxBox2DPlatform = "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
     const val logbackClassic = "ch.qos.logback:logback-classic:$logbackVersion"

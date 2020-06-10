@@ -10,7 +10,7 @@ object Versions {
     const val snakeyamlVersion = "1.18"
     const val slf4jVersion = "1.7.25"
     const val logbackVersion = "1.2.3"
-    const val gdxVersion = "1.9.8"
+    const val gdxVersion = "1.9.10"
     const val filtersVersion = "2.0.235-1"
 
     const val junitVersion = "4.12"
