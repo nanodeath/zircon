@@ -13,6 +13,7 @@ import org.hexworks.zircon.internal.resource.TilesetType.CP437_TILESET
 import org.hexworks.zircon.internal.resource.TilesetType.GRAPHIC_TILESET
 import org.hexworks.zircon.internal.resource.TilesetType.TRUE_TYPE_FONT
 import java.awt.Graphics2D
+import java.util.ServiceLoader
 
 @Suppress("UNCHECKED_CAST")
 class SwingTilesetLoader : TilesetLoader<Graphics2D>, Closeable {
@@ -24,8 +25,15 @@ class SwingTilesetLoader : TilesetLoader<Graphics2D>, Closeable {
     override fun loadTilesetFrom(resource: TilesetResource): Tileset<Graphics2D> {
         return tilesetCache.getOrPut(resource.id) {
             LOADERS[resource.getLoaderKey()]?.invoke(resource)
-                    ?: throw IllegalArgumentException("Unknown tile type '${resource.tileType}'.§")
+                    ?: customLoaders[resource.getLoaderKey()]?.load(resource)
+                    ?: throw IllegalArgumentException("Unknown tile type '${resource.tileType}', can't use ${resource.getLoaderKey()}.§")
         }
+    }
+
+    private val customLoaders: Map<String, CustomLoader> by lazy {
+        ServiceLoader.load(CustomLoader::class.java).asSequence()
+            .map { it.loaderKey to it }
+            .toMap()
     }
 
     override fun close() {
@@ -33,9 +41,17 @@ class SwingTilesetLoader : TilesetLoader<Graphics2D>, Closeable {
         tilesetCache.clear()
     }
 
+    interface CustomLoader {
+        val loaderKey: String
+        fun load(tilesetResource: TilesetResource): Tileset<Graphics2D>
+    }
+
     companion object {
 
-        fun TilesetResource.getLoaderKey() = "${this.tileType.name}-${this.tilesetType.name}"
+        fun TilesetResource.getLoaderKey(): String {
+            val subtype = this.tilesetSubtype?.let { "-$it" }.orEmpty()
+            return "${this.tileType.name}-${this.tilesetType.name}$subtype"
+        }
 
         private val LOADERS: Map<String, (TilesetResource) -> Tileset<Graphics2D>> = mapOf(
                 "$CHARACTER_TILE-$CP437_TILESET" to { resource: TilesetResource ->

@@ -14,6 +14,7 @@ interface TilesetResource : Identifiable {
 
     val tileType: TileType
     val tilesetType: TilesetType
+    val tilesetSubtype: String? get() = null
     val tilesetSourceType: TilesetSourceType
     val width: Int
     val height: Int
