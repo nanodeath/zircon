@@ -1,7 +1,10 @@
 package org.hexworks.zircon.internal.uievent.impl
 
 import org.assertj.core.api.Assertions.assertThat
+import org.hexworks.cobalt.datatypes.Maybe
+import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.uievent.*
+import org.hexworks.zircon.api.uievent.ComponentEventType.*
 import org.hexworks.zircon.internal.behavior.ComponentFocusOrderList
 import org.hexworks.zircon.internal.component.InternalContainer
 import org.hexworks.zircon.internal.component.impl.RootContainer
@@ -137,6 +140,42 @@ class UIEventToComponentDispatcherTest {
         assertThat(result).isEqualTo(StopPropagation)
     }
 
+    @Test
+    fun dispatchShouldAlwaysDispatchToPressedComponent() {
+        // Summary: when you click and drag, the start component gets the MOUSE_PRESSED event and the activation event,
+        // drag events are sent to the start component,
+        // and when you release the click, the start component gets the MOUSE_RELEASED event and the end component gets the
+        // deactivation event.
+
+        // When we press the mouse on child0
+        whenever(rootMock.fetchComponentByPosition(MOUSE_PRESSED.position)).thenReturn(Maybe.of(child0Mock))
+        // we send the mouse press events to child0
+        whenever(child0Mock.process(MOUSE_PRESSED, UIEventPhase.TARGET)).thenReturn(Pass)
+        whenever(child0Mock.mousePressed(MOUSE_PRESSED, UIEventPhase.TARGET)).thenReturn(Pass)
+        // which also causes it to become activated
+        whenever(child0Mock.process(ComponentEvent(ACTIVATED), UIEventPhase.TARGET)).thenReturn(Processed)
+        whenever(child0Mock.activated()).thenReturn(Processed)
+
+        // Even when we drag the mouse over child1
+        whenever(rootMock.fetchComponentByPosition(MOUSE_DRAGGED.position)).thenReturn(Maybe.of(child1Mock))
+        // the drag events are still sent to child0
+        whenever(child0Mock.process(MOUSE_DRAGGED, UIEventPhase.TARGET)).thenReturn(Pass)
+        whenever(child0Mock.mouseDragged(MOUSE_DRAGGED, UIEventPhase.TARGET)).thenReturn(Pass)
+
+        // When we finally release the mouse click (over child1)
+        whenever(rootMock.fetchComponentByPosition(MOUSE_RELEASED.position)).thenReturn(Maybe.of(child1Mock))
+        // child0 gets the release event
+        whenever(child0Mock.process(MOUSE_RELEASED, UIEventPhase.TARGET)).thenReturn(Pass)
+        whenever(child0Mock.mouseReleased(MOUSE_RELEASED, UIEventPhase.TARGET)).thenReturn(Pass)
+        // HOWEVER child1 is deactivated
+        whenever(child1Mock.process(ComponentEvent(DEACTIVATED), UIEventPhase.TARGET)).thenReturn(Processed)
+        whenever(child1Mock.deactivated()).thenReturn(Processed)
+
+        target.dispatch(MOUSE_PRESSED)
+        target.dispatch(MOUSE_DRAGGED)
+        target.dispatch(MOUSE_RELEASED)
+    }
+
 
     companion object {
         val KEY_A_PRESSED_EVENT = KeyboardEvent(
@@ -148,5 +187,15 @@ class UIEventToComponentDispatcherTest {
                 type = KeyboardEventType.KEY_PRESSED,
                 code = KeyCode.TAB,
                 key = "\t")
+
+        val MOUSE_PRESSED = MouseEvent(MouseEventType.MOUSE_PRESSED,
+            1,
+            Position.create(1, 1))
+        val MOUSE_DRAGGED = MouseEvent(MouseEventType.MOUSE_DRAGGED,
+            1,
+            Position.create(2, 2))
+        val MOUSE_RELEASED = MouseEvent(MouseEventType.MOUSE_RELEASED,
+            1,
+            Position.create(3, 3))
     }
 }

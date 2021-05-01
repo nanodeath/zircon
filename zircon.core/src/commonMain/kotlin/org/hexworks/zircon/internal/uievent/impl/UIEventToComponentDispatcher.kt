@@ -39,6 +39,7 @@ class UIEventToComponentDispatcher(
 
     private var lastMousePosition = Position.unknown()
     private var lastHoveredComponent: InternalComponent = root
+    private var lastPressedComponent: InternalComponent? = null
 
     private val shortcutsConfig = RuntimeConfig.config.shortcutsConfig
 
@@ -192,13 +193,23 @@ class UIEventToComponentDispatcher(
         phase: UIEventPhase,
         previousResult: UIEventResponse
     ): UIEventResponse {
+        val activeComponent = lastPressedComponent
+            ?.takeIf { phase == TARGET && (event.type == MOUSE_DRAGGED || event.type == MOUSE_RELEASED) }
+            ?: component
         var result = previousResult
-        result = result.pickByPrecedence(component.process(event, phase))
+        result = result.pickByPrecedence(activeComponent.process(event, phase))
         if (result.shouldStopPropagation()) {
 //            logger.debug("Propagation was stopped by component: $component.")
         } else if (result.allowsDefaults()) {
 //            logger.debug("Trying defaults for component $component, with event $event and phase $phase")
-            result = result.pickByPrecedence(tryDefaultsFor(component, event, phase))
+            result = result.pickByPrecedence(tryDefaultsFor(activeComponent, event, phase))
+            // Update lastPressedComponent depending on event type
+            if (phase == TARGET) {
+                when (event.type) {
+                    MOUSE_PRESSED -> lastPressedComponent = component
+                    MOUSE_RELEASED -> lastPressedComponent = null
+                }
+            }
         }
         return result
     }
